@@ -21,37 +21,22 @@ class App extends Component {
     this.getPlanets(url);
   };
 
-  // getPlanets(){
-  //   const url = 'https://swapi.co/api/planets/?format=json'
-  //   axios.get(url)
-  //     .then( (response) => {
-  //       console.log('the response data:', response.data);
-  //       this.setState( {planetList: response.data.results});
+  async getPlanets(url){
+    let nextUrl = url;
+    while(nextUrl != null) {
+      await axios.get(nextUrl)
+        .then((response) => {
+          console.log('Got more planets', response.data.results)
+          this.setState({planetList: [...this.state.planetList, ...response.data.results]});
+          nextUrl = response.data.next;
+          console.log('The Next URL is', nextUrl)
 
-  //       let nextUrl = response.data.next;
-  //       if(nextUrl != null){
-  //          this.getMorePlanets(nextUrl);
-  //         };
-  //     })
-  //     .catch( (error) => {
-  //       console.log(error);
-  //     })
-  //   }
-
-    getPlanets(nextUrl){
-      if(nextUrl != null) {
-      axios.get(nextUrl)
-      .then((response) => {
-        console.log('Got more planets', response.data.results)
-        this.setState({planetList: [...this.state.planetList, ...response.data.results]});
-        let nextUrl = response.data.next;
-        this.getPlanets(nextUrl)
-        console.log('The Next URL is', nextUrl)
-      })
-      .catch( (error) => {
-        console.log(error);
-      })
-    }
+        })
+        .catch( (error) => {
+          console.log(error);
+          nextUrl = null;
+        })
+  }
   }
 
   render() {
@@ -64,7 +49,8 @@ class App extends Component {
         <div>
         <h2>All the Planets</h2>
                 <ul>
-                    {this.state.planetList.map(planet => <li key={planet.url}>{planet.name} where the climate is {planet.climate}</li>)}
+                    {this.state.planetList.map(planet => <li key={planet.url}>{planet.name} 
+                    where the climate is {planet.climate}</li>)}
                 </ul>
           </div>
       </div>
