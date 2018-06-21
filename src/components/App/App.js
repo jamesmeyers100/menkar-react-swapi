@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
+import Header from '../Header/Header';
+import PlanetList from '../PlanetList/PlanetList';
+
 
 
 class App extends Component {
@@ -43,16 +46,8 @@ class App extends Component {
     console.log('These are the planets', this.state.planetList)
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">SWAPI Planets</h1>
-        </header>
-        <div>
-        <h2>All the Planets</h2>
-                <ul>
-                    {this.state.planetList.map(planet => <li key={planet.url}>{planet.name} 
-                    where the climate is {planet.climate}</li>)}
-                </ul>
-          </div>
+        <Header />
+        <PlanetList planetList={this.state.planetList}/>
       </div>
     );
   };
